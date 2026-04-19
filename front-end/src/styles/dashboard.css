@@ -1,0 +1,11 @@
+.hx-student-shell {
+  max-width: 1240px;
+}
+
+.hx-student-panel {
+  min-height: 120px;
+}
+
+.hx-student-table td strong {
+  white-space: nowrap;
+}
