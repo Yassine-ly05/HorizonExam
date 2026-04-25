@@ -1,0 +1,116 @@
+/* Form Containers */
+.hx-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.hx-form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.hx-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Labels */
+.hx-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--hx-text-main);
+}
+
+/* Inputs, Selects & Textareas */
+.hx-input,
+.hx-select {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: var(--hx-radius-md);
+  border: 1px solid var(--hx-border);
+  background-color: var(--hx-surface);
+  color: var(--hx-text-main);
+  font-size: 0.9375rem;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.hx-input:focus,
+.hx-select:focus {
+  border-color: var(--hx-primary);
+  box-shadow: 0 0 0 3px var(--hx-primary-light);
+}
+
+.hx-input::placeholder {
+  color: var(--hx-text-light);
+}
+
+/* Select Specifics */
+.hx-select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 40px;
+}
+
+/* Buttons */
+.hx-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  border-radius: var(--hx-radius-md);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+  cursor: pointer;
+  gap: 8px;
+}
+
+.hx-btn-primary {
+  background-color: var(--hx-primary);
+  color: white;
+}
+
+.hx-btn-primary:hover {
+  background-color: var(--hx-primary-dark);
+}
+
+.hx-btn-success {
+  background-color: var(--hx-success);
+  color: white;
+}
+
+.hx-btn-success:hover {
+  background-color: #059669;
+}
+
+.hx-btn-danger {
+  background-color: var(--hx-danger);
+  color: white;
+}
+
+.hx-btn-danger:hover {
+  background-color: #dc2626;
+}
+
+.hx-btn-sm {
+  padding: 6px 12px;
+  font-size: 0.8125rem;
+}
+
+.hx-btn-block {
+  width: 100%;
+}
+
+.hx-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

@@ -1,0 +1,52 @@
+:root {
+  /* Colors - Professional Palette */
+  --hx-primary: #0059a8;
+  --hx-primary-dark: #003b73;
+  --hx-primary-light: #eef5ff;
+  --hx-secondary: #ffb81c;
+  --hx-secondary-soft: #fff9eb;
+  
+  /* Neutral Palette */
+  --hx-bg: #f4f5f7;
+  --hx-surface: #ffffff;
+  --hx-sidebar: #1e293b;
+  --hx-sidebar-hover: #334155;
+  --hx-sidebar-text: #f8fafc;
+  
+  /* Status Colors */
+  --hx-success: #10b981;
+  --hx-success-soft: #ecfdf5;
+  --hx-warning: #f59e0b;
+  --hx-warning-soft: #fffbeb;
+  --hx-danger: #ef4444;
+  --hx-danger-soft: #fef2f2;
+  --hx-info: #3b82f6;
+  --hx-info-soft: #eff6ff;
+
+  /* Text Colors */
+  --hx-text-main: #1f2933;
+  --hx-text-muted: #6b7280;
+  --hx-text-light: #94a3b8;
+  --hx-text-on-sidebar: #cbd5e1;
+
+  /* Borders & Shadows */
+  --hx-border: #dde1e8;
+  --hx-border-hover: #cbd5e1;
+  --hx-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --hx-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --hx-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --hx-shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.18);
+
+  /* Layout Variables */
+  --hx-sidebar-width: 260px;
+  --hx-sidebar-collapsed-width: 80px;
+  --hx-header-height: 70px;
+  --hx-radius-sm: 6px;
+  --hx-radius-md: 10px;
+  --hx-radius-lg: 16px;
+  --hx-radius-xl: 24px;
+  --hx-radius-pill: 999px;
+  
+  /* Transitions */
+  --hx-transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}

@@ -1,0 +1,108 @@
+CREATE DATABASE IF NOT EXISTS horizon_exam;
+USE horizon_exam;
+
+CREATE TABLE IF NOT EXISTS students (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(120) NOT NULL,
+  email VARCHAR(180) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  role ENUM('student', 'teacher', 'admin') NOT NULL DEFAULT 'student',
+  class VARCHAR(80),
+  semester INT,
+  createdAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS exam_sessions (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  subject VARCHAR(120) NOT NULL,
+  exam_type ENUM('Exam', 'DS', 'CC', 'Remedial') NOT NULL,
+  exam_date DATE NOT NULL,
+  start_time TIME NULL,
+  end_time TIME NULL,
+  room VARCHAR(40) NULL,
+  teacher_id INT NULL,
+  createdAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (teacher_id) REFERENCES students(id) ON DELETE SET NULL
+);
+
+CREATE TABLE IF NOT EXISTS results (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  Student_id INT NOT NULL,
+  ExamSession_id INT NOT NULL,
+  grade FLOAT NOT NULL,
+  semester INT,
+  status ENUM('Pending', 'Validated', 'Published') NOT NULL DEFAULT 'Pending',
+  createdAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  UNIQUE KEY uq_result_student_session (Student_id, ExamSession_id),
+  FOREIGN KEY (Student_id) REFERENCES students(id) ON DELETE CASCADE,
+  FOREIGN KEY (ExamSession_id) REFERENCES exam_sessions(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS attendance (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  student_id INT NOT NULL,
+  exam_session_id INT,
+  exam_date DATE NOT NULL,
+  exam_type ENUM('Exam', 'DS', 'CC', 'Remedial') NOT NULL,
+  status ENUM('Present', 'Absent') NOT NULL,
+  teacher_id INT,
+  createdAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  UNIQUE KEY uq_attendance_student_session (student_id, exam_session_id),
+  FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE,
+  FOREIGN KEY (exam_session_id) REFERENCES exam_sessions(id) ON DELETE SET NULL
+);
+
+CREATE TABLE IF NOT EXISTS timetables (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  student_id INT NOT NULL,
+  exam_date DATE NOT NULL,
+  start_time TIME NOT NULL,
+  end_time TIME NULL,
+  room VARCHAR(40),
+  subject VARCHAR(120),
+  exam_type ENUM('Exam', 'DS', 'CC', 'Remedial'),
+  createdAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS notifications (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  student_id INT NOT NULL,
+  title VARCHAR(180) NOT NULL,
+  message TEXT,
+  type ENUM('info', 'success', 'warning') NOT NULL DEFAULT 'info',
+  is_read BOOLEAN NOT NULL DEFAULT FALSE,
+  createdAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS double_correction_requests (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  student_id INT NOT NULL,
+  result_id INT NOT NULL,
+  request_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  reason TEXT NOT NULL,
+  status ENUM('Pending', 'Accepted', 'Rejected') NOT NULL DEFAULT 'Pending',
+  decision_note TEXT,
+  createdAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE,
+  FOREIGN KEY (result_id) REFERENCES results(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS exam_reports (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  exam_session_id INT NOT NULL,
+  teacher_id INT NOT NULL,
+  report_text TEXT NOT NULL,
+  createdAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (exam_session_id) REFERENCES exam_sessions(id) ON DELETE CASCADE,
+  FOREIGN KEY (teacher_id) REFERENCES students(id) ON DELETE CASCADE
+);
