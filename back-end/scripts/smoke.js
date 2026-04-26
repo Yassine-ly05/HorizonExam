@@ -17,8 +17,8 @@ async function run() {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      email: "teacher@horizon.edu",
-      password: "teacher123",
+      email: "teacher@horizon.tn",
+      password: "teacher12345",
       role: "teacher",
     }),
   });
@@ -28,8 +28,8 @@ async function run() {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      email: "admin@horizon.edu",
-      password: "admin123",
+      email: "admin@horizon.tn",
+      password: "admin12345",
       role: "admin",
     }),
   });
