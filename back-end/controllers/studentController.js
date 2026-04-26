@@ -47,6 +47,7 @@ exports.getDashboardData = async (req, res) => {
 
     const absences = await Attendance.findAll({
       where: { student_id: studentId, status: "Absent" },
+      include: [{ model: ExamSession, attributes: ["subject"] }],
       order: [["exam_date", "DESC"]],
     });
 
@@ -66,9 +67,31 @@ exports.getDashboardData = async (req, res) => {
       id: item.id,
       subject: item.ExamSession?.subject || "Course",
       examType: item.ExamSession?.exam_type || "-",
+      examDate: item.ExamSession?.exam_date || null,
       semester: item.semester || "-",
       grade: item.grade,
+      status: item.status || "Published",
     }));
+
+    const sessions = timetable.map((item) => ({
+      id: item.id,
+      subject: item.subject,
+      examType: item.exam_type,
+      examDate: item.exam_date,
+      startTime: item.start_time,
+      endTime: item.end_time,
+      room: item.room,
+    }));
+
+    const absenceRows = absences.map((item) => ({
+      id: item.id,
+      subject: item.ExamSession?.subject || "Session",
+      date: item.exam_date,
+      examType: item.exam_type,
+      status: item.status,
+    }));
+
+    const finalStatus = calculateFinalStatus(gradeRows);
 
     return res.json({
       student: {
@@ -78,17 +101,15 @@ exports.getDashboardData = async (req, res) => {
         class: student.class,
       },
       grades: gradeRows,
-      absences,
-      timetable: timetable.map((item) => ({
-        id: item.id,
-        subject: item.subject,
-        examType: item.exam_type,
-        date: item.exam_date,
-        startTime: item.start_time,
-        endTime: item.end_time,
-        room: item.room,
-      })),
-      summary: calculateFinalStatus(gradeRows),
+      absences: absenceRows,
+      sessions,
+      timetable: sessions,
+      summary: {
+        average: finalStatus.finalAverage,
+        absencesCount: absenceRows.length,
+        sessionsCount: sessions.length,
+        ...finalStatus,
+      },
       notifications: notifications.map((n) => ({
         id: n.id,
         title: n.title,

@@ -23,12 +23,21 @@ const adminRoutes = require("./routes/adminRoutes");
 
 const app = express();
 const PORT = Number(process.env.PORT || 5000);
+let isDatabaseReady = false;
 
 // Middleware
 app.use(cors({ origin: true, credentials: true }));
 app.use(helmet());
 app.use(morgan("dev"));
 app.use(express.json());
+
+app.use((req, res, next) => {
+  if (req.path === "/health") return next();
+  if (isDatabaseReady) return next();
+  return res.status(503).json({
+    message: "Database is not ready. Start MySQL then restart the backend.",
+  });
+});
 
 // Routes implementation
 app.use("/auth", authRoutes);
@@ -49,18 +58,20 @@ app.use((err, req, res, next) => {
 const startServer = async () => {
   try {
     await sequelize.authenticate();
+    isDatabaseReady = true;
     console.log("Database connected successfully.");
     
     // In production, you might not want to sync alter: true
     if (process.env.NODE_ENV !== "production") {
       await sequelize.sync({ alter: false });
     }
-
+  } catch (error) {
+    isDatabaseReady = false;
+    console.error("Unable to connect to the database:", error);
+  } finally {
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
     });
-  } catch (error) {
-    console.error("Unable to connect to the database:", error);
   }
 };
 
